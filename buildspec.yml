@@ -3,8 +3,7 @@ phases:
   install:
     commands:
       - echo Entered the install phase...
-      - wget https://github.com/gohugoio/hugo/releases/download/v0.41/hugo_0.41_Linux-64bit.tar.gz && \
-          tar xvf hugo_0.41_Linux-64bit.tar.gz
+      - wget https://github.com/gohugoio/hugo/releases/download/v0.41/hugo_0.41_Linux-64bit.tar.gz && /bin/tar xvf hugo_0.41_Linux-64bit.tar.gz
       - ./hugo version
   build:
     commands:
