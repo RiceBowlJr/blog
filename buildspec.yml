@@ -2,13 +2,11 @@ version: 0.1
 phases:
   install:
     commands:
-      - echo Entered the install phase...
+      - pip install --upgrade awscli
       - wget https://github.com/gohugoio/hugo/releases/download/v0.41/hugo_0.41_Linux-64bit.tar.gz && /bin/tar xvf hugo_0.41_Linux-64bit.tar.gz
       - ./hugo version
   build:
     commands:
-      - echo Entered the build phase...
-      - echo Build started on `date`
       - ./hugo
       - aws s3 sync public/ s3://$BUCKET_NAME --delete --cache-control max-age=$CACHE_CONTROL_MAX_AGE
   post_build:

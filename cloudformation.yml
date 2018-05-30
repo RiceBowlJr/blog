@@ -218,7 +218,7 @@ Resources:
         Type: "CODEPIPELINE"
       Environment:
         ComputeType: "BUILD_GENERAL1_SMALL"
-        Image: "alpine:3.7"
+        Image: "python:2.7"
         Type: "LINUX_CONTAINER"
         EnvironmentVariables:
           - Name: AWS_DEFAULT_REGION
