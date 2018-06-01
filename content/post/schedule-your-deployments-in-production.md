@@ -8,7 +8,7 @@ Tags:
 - lambda
 - amazon
 date: 2018-05-30T19:22:19+02:00
-draft:  true
+draft:  false
 title: "Schedule Your Deployments in Production"
 ---
 
@@ -33,7 +33,7 @@ This Approval is now the wall that prevent to deploy to production.<br />
 The other part is the CloudWatch Event that trigger the Lambda function. It is configured with a scheduled cron rule that trigger the Lambda on mondays at 9am.<br />
 Then the Lambda function: a JavaScript script that interact with the Pipeline. It gather infos about the pipeline, because to approve the approval, a token is needed, and then approve the approval.
 
-<center><img src="images/AutomaticCodePipelineApprovalArchitecture.png" alt="Architecture" width="800" align="middle"></center>
+<center>![Architecture](https://static.blog.ricebowljr.cc/images/AutomaticCodePipelineApprovalArchitecture.png)</center>
 
 ## Deploy the solution
 
