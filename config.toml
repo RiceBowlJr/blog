@@ -1,4 +1,4 @@
-baseURL = "https://blog.ricebowljr.cc/"
+baseURL = "https://blog.ricebowljr.cc"
 languageCode = "en-EN"
 title = "Rice Bowl Jr - A Cloud Enthousiast"
 theme = "hugo-redlounge"
