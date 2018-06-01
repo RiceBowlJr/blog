@@ -1,5 +1,5 @@
 # Site settings
-baseurl = "https://blog.ricebowljr.cc"
+baseurl = "https://blog.ricebowljr.cc/"
 languageCode = "en"
 title = "Rice Bowl Jr"
 theme = "hugo-theme-cactus-plus"
