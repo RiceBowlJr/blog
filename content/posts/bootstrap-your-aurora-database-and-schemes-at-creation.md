@@ -8,7 +8,7 @@ Tags:
 - amazon
 title: "Bootstrap Your Aurora Schemes ans users at Creation"
 date: 2018-06-01T18:26:54+02:00
-draft: true
+draft: false
 ---
 
 # Context
