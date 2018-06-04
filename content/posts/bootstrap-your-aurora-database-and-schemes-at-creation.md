@@ -19,8 +19,8 @@ CloudFormation (or even through the web console), you can only launch your
 Aurora database with one scheme and the root user.<br>
 Some may say that we don't launch an Aurora database that often, but hey, in
 some cases, you do. For example for a fast growing start up (web app editor)
-which onboard new customers every single month, and those customers require to
-be on a dedicated infrastructure (yes some does).
+which onboard new customers every single month, and whose customers require to
+be on a dedicated infrastructure (yes, some still does).
 
 To do so I struggled with **CloudFormation notifications**, **SNS** and
 **Lambda**.
@@ -31,14 +31,14 @@ Basicaly, I just launch an Aurora cluster with CloudFormation. So I first want
 to know when my cluster is ready so I can launch a Lambda function which will
 bootstrap my schemes and low privileges users.<br>
 After launching a first Aurora cluster and watching closely when CloudFormation
-told me `CREATION_COMPLETE` and when I could connect to my [Mysql] database, I
+told me `CREATION_COMPLETE` so I could connect to my [Mysql] database, I
 found out that CloudFormation wait until the resource is completly ready, so
-when the Aurora cluster generates an endpoint and swithc to `Ready` status.<br>
+when the Aurora cluster generates an endpoint and switch to `Ready` status.<br>
 Perfect! Exactly what I was looking for, I can do something with
 CloudFormation, so it can told me that the database is ready.
 
 Next step, I go to CloudWatch Events to look for a CloudFormation Event to
-trigger my Lambda... *Dow!* No CloudFormation Event, or at least, that's not
+trigger my Lambda... *Doh!* No CloudFormation Event, or at least, that's not
 pretty clear.<br>
 After some research, I found out that we can generate notifications and put those as
 messages in a SNS queue. You simply have to add the `--notification-arns
@@ -47,8 +47,8 @@ messages in a SNS queue. You simply have to add the `--notification-arns
 So lets destroy everything and recreate all the things. Wait, my Lambda, it
 needs to run inside my VPC so I can attribute it a Security Group and allow it
 to access to my Aurora cluster, easy, that's a feature made by AWS, you just
-need to be careful on how mush you trigger your Lambda, you don't want to use
-all your IP available in your subnets, and forbid any of your application
+need to be careful on how often you trigger your Lambda, because you don't want to use
+all your IPs available in your subnets, and forbid any of your application
 running on EC2 to launch.
 
 # Architecture
@@ -70,19 +70,18 @@ As you can see, the workflow is the following (lets assume we already have creat
      the SNS ARN
   2. At each event, CloudFormation sends a notification to the SNS queue
   3. This notification trigger a Lambda function
-  4. The Lambda function queries the CloudFormation APi to see if the stack
-     is in `CREATE_COMPLETE` state, if not, the process loops here, with
+  4. The Lambda function queries the CloudFormation API to see if the stack
+     is in `CREATE_COMPLETE` state. If not, the process loops there, with
      the next CloudFormation notification
-  5. The Lambda function catches a `CREATE_COMPLETE` status, so start the
+  5. The Lambda function catches a `CREATE_COMPLETE` status, so it can start the
      script that will create the schemes and the user on the database
 
 # Code
 
-Well lets prove that it is really doable.
+Well, lets prove that it is really doable.
 
-First we need to launch the SNS Queue and the Lambda function. But lets create
-all Security Groups before that, and export them so we can reuse them in other
-stacks:
+First, we need to launch the SNS Queue and the Lambda function. We have to create
+the Security Groups and export them so we can reuse them in other stacks:
 
 ```
 Resources:
@@ -208,12 +207,12 @@ Outputs:
       Name: snstopic-arn
 ```
 
-As you can see, the SNS Topic need a special permission to invoke the Lambda
-function, that's something ou don't have to do within the web console.<br>
-You may want to retrieve root user and password from the parameter store so
+As you can see, the SNS Topic needs a special permission to invoke the Lambda
+function, and that's something you don't have to do within the web console.<br>
+You may want to retrieve the root user and password from the parameter store so
 they don't appear in clear text in your Lambda.<br>
 You can also see that we grab the Lambda code from an Osones public bucket to
-make ou rlife easier, but for you, here is the code:
+make your life easier, but for you, here is the code:
 ```
 'use strict';
 const AWS = require("aws-sdk");
@@ -296,8 +295,7 @@ exports.handler = (event, context, callback) => {
 
 ```
 
-Lets lastly generate a Aurora cluster
-with the following template:
+Finally, we generate the Aurora cluster with the following template:
 
 ```
 Resources:
@@ -347,9 +345,9 @@ Resources:
 
 
 As you can see, you need some parameters and other stuff to launch this
-resources. You may want to get your **root user** and **password** in the
+resource. You may want to get your **root user** and **password** in the
 Parameter Store, or at least set the CloudFormation parameter `NoEcho: true` so
-the are not shown in the stack parameters within the web console or AWS CLI.
+they are not shown in the stack parameters within the web console or AWS CLI.
 
 Carefull when launching this stack, you need to name it accordingly to the name
 set within the Lambda function, which in our case is `osones-blog-demo-aurora`.
