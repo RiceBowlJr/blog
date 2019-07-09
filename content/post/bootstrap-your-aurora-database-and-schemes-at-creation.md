@@ -83,9 +83,8 @@ Well, lets prove that it is really doable.
 First, we need to launch the SNS Queue and the Lambda function. We have to create
 the Security Groups and export them so we can reuse them in other stacks:
 
-```
+{{< highlight yaml >}}
 Resources:
-
   InitDbSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -117,13 +116,12 @@ Outputs:
     Value: !GetAtt InitDbSG.GroupId
     Export:
       Name: InitDbSG
-```
+{{< /highlight >}}
 
 And now the SNS queue and Lambda function:
 
-```
+{{< highlight yaml >}}
 Resources:
-
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -205,7 +203,7 @@ Outputs:
     Value: !Ref SnsTopic
     Export:
       Name: snstopic-arn
-```
+{{< /highlight >}}
 
 As you can see, the SNS Topic needs a special permission to invoke the Lambda
 function, and that's something you don't have to do within the web console.<br>
@@ -213,7 +211,8 @@ You may want to retrieve the root user and password from the parameter store so
 they don't appear in clear text in your Lambda.<br>
 You can also see that we grab the Lambda code from an Osones public bucket to
 make your life easier, but for you, here is the code:
-```
+
+{{< highlight javascript >}}
 'use strict';
 const AWS = require("aws-sdk");
 const mysql = require("mysql");
@@ -292,12 +291,13 @@ exports.handler = (event, context, callback) => {
     }
     callback(null, event);
 };
+{{< /highlight >}}
 
-```
 
 Finally, we generate the Aurora cluster with the following template:
 
-```
+{{< highlight yaml >}}
+
 Resources:
   RDSCluster:
     Type: AWS::RDS::DBCluster
@@ -341,7 +341,7 @@ Resources:
         - { "Fn::ImportValue" : {"Fn::Sub": "PrivateSubnet1" } }
         - { "Fn::ImportValue" : {"Fn::Sub": "PrivateSubnet2" } }
         - { "Fn::ImportValue" : {"Fn::Sub": "PrivateSubnet3" } }
-```
+{{< /highlight >}}
 
 
 As you can see, you need some parameters and other stuff to launch this
