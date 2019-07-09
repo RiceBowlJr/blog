@@ -1,7 +1,7 @@
 language: python
 env:
   global:
-  - HUGO_VERSION="0.41"
+  - HUGO_VERSION="0.55.6"
   - BUCKET_NAME="blog.ricebowljr.cc"
   - MAX_AGE="300"
 before_install:
