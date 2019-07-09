@@ -5,7 +5,7 @@ env:
   - BUCKET_NAME="blog.ricebowljr.cc"
   - MAX_AGE="300"
 before_install:
-- pip install --upgrade awscli
+- pip install --upgrade awscli Pygments
 install:
 script:
 - wget -qO- "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz" | tar xvz
